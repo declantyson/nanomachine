@@ -43,6 +43,22 @@ const createUser = (user, password, callback = () => {}) => {
                         password: hash
                     }, (err, rows) => {
                         log.success("User created");
+                        log.info("Generating days");
+                        for(let i = 1; i <= 30; i++) {
+                            const date = new Date();
+                            date.setFullYear(2021);
+                            date.setMonth(10);
+                            date.setDate(i);
+
+                            connection.query('INSERT INTO day SET ?', {
+                                id: data.generateId(),
+                                date: date.toISOString().split('T')[0],
+                                index: i,
+                                userId
+                            });
+                        }  
+
+                        log.success("You're all set!");
                     });
                 });
             });

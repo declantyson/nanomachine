@@ -25,6 +25,8 @@ const initialSpec = process.env.npm_config_initialSpec || -1,
   initialUser = process.env.INITIAL_USER || false,
   initialPassword = process.env.INITIAL_PASSWORD || false;
 
+const log = require('./log');
+
 if (dbUser === -1 || dbPass === -1) {
   console.log(
     "No database credentials provided. Please pass them with --dbUser and --dbPass."
@@ -85,10 +87,16 @@ app.get("/settings/:key", (req, res) => {
   });
 });
 
+registerAuthenticatedEndpoint(
+  "/:userId",
+  (req, res) => {
+    log.success("ok cool");
+  }
+);
 
 const renderJson = (res, body) => {
   res.writeHead(200, { "Content-Type": "application/json" });
-  console.log(body);
+  log.info(body);
   body = dataControls.cleanResults(body);
 
   res.end(body);
@@ -96,4 +104,4 @@ const renderJson = (res, body) => {
 
 http.createServer(app).listen(port);
 
-console.log(`App running on ${port}`);
+log.success(`App running on ${port}`);
